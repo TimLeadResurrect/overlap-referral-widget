@@ -26,7 +26,7 @@
   };
   // ============================================================
 
-  var container = document.getElementById("referral-dashboard");
+  var container = document.getElementById("referral-widget");
   if (!container) return;
 
   // Resolve referral code: data-ref attribute > URL param
@@ -175,7 +175,7 @@
     style.id = "rw-styles";
     style.textContent = [
       "/* Referral Widget Styles */",
-      "#referral-dashboard { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; color: " + c.text + "; }",
+      "#referral-widget { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; color: " + c.text + "; }",
 
       /* Loading */
       ".rw-loading { text-align: center; padding: 40px 20px; color: " + c.textLight + "; }",
