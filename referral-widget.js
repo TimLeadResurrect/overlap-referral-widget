@@ -267,7 +267,7 @@
 
       /* Link box */
       ".rw-link-box { display: flex; border-radius: 50px; overflow: hidden; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); max-width: 600px; margin: 0 auto; }",
-      ".rw-link-input { flex: 1; border: none; padding: 12px 12px 12px 24px; font-size: 13px; color: " + c.text + "; background: " + c.white + "; outline: none; min-width: 0; border-radius: 50px 0 0 50px; }",
+      ".rw-link-input { flex: 1; border: none; padding: 14px 12px 14px 28px; font-size: 14px; color: " + c.text + "; background: " + c.white + "; outline: none; min-width: 0; border-radius: 50px 0 0 50px; }",
       ".rw-copy-btn { background: " + c.primaryDark + "; color: " + c.white + "; border: none; padding: 12px 22px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; letter-spacing: 0.5px; white-space: nowrap; display: flex; align-items: center; gap: 6px; border-radius: 0 50px 50px 0; }",
       ".rw-copy-btn:hover { background: " + c.text + "; }",
       ".rw-copy-btn.rw-copied { background: " + c.success + "; }",
@@ -328,7 +328,7 @@
       "  .rw-progress { padding: 24px 18px; }",
       "  .rw-milestones { padding: 22px 18px 26px; }",
       "  .rw-card { border-radius: 18px; }",
-      "  .rw-link-input { font-size: 12px; padding: 11px 14px; }",
+      "  .rw-link-input { font-size: 12px; padding: 12px 12px 12px 22px; }",
       "  .rw-copy-btn { padding: 11px 16px; font-size: 12px; }",
       "}",
     ].join("\n");
