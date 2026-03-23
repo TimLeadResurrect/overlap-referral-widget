@@ -48,30 +48,71 @@
     refCode = params.get("ref");
   }
 
-  if (!refCode) {
-    container.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">No referral code found.</p>';
-    return;
-  }
-
   // Inject styles
   injectStyles();
 
-  // Show loading state
-  container.innerHTML = '<div class="rw-loading"><div class="rw-spinner"></div><p>Loading your dashboard...</p></div>';
+  if (!refCode) {
+    // No ref code — show email login form
+    renderLoginForm();
+    return;
+  }
 
-  // Fetch data
-  fetch(CONFIG.supabaseUrl + "?ref=" + encodeURIComponent(refCode))
-    .then(function (res) { return res.json(); })
-    .then(function (data) {
-      if (!data.success) {
-        container.innerHTML = '<div class="rw-error"><p>We couldn\'t find that referral code. Double-check your link and try again.</p></div>';
-        return;
+  // Has ref code — load dashboard
+  loadDashboard("ref", refCode);
+
+  function loadDashboard(paramName, paramValue) {
+    container.innerHTML = '<div class="rw-loading"><div class="rw-spinner"></div><p>Loading your dashboard...</p></div>';
+
+    fetch(CONFIG.supabaseUrl + "?" + paramName + "=" + encodeURIComponent(paramValue))
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (!data.success) {
+          if (paramName === "email") {
+            renderLoginForm("We couldn't find that email. Make sure you're using the same email you signed up with.");
+          } else {
+            container.innerHTML = '<div class="rw-error"><p>We couldn\'t find that referral code. Double-check your link and try again.</p></div>';
+          }
+          return;
+        }
+        // Update URL with ref code so bookmarking/sharing works
+        if (paramName === "email" && data.referral_code) {
+          var newUrl = window.location.pathname + "?ref=" + data.referral_code;
+          window.history.replaceState(null, "", newUrl);
+        }
+        render(data);
+      })
+      .catch(function () {
+        container.innerHTML = '<div class="rw-error"><p>Something went wrong loading your dashboard. Please try refreshing.</p></div>';
+      });
+  }
+
+  function renderLoginForm(errorMsg) {
+    var html = '';
+    html += '<div class="rw-card">';
+    html += '  <div class="rw-login">';
+    html += '    <div class="rw-login-icon">' + ICONS.unlock + '</div>';
+    html += '    <h2>View Your Referral Dashboard</h2>';
+    html += '    <p class="rw-login-subtitle">Enter the email you signed up with to see your stats and referral link.</p>';
+    if (errorMsg) {
+      html += '    <p class="rw-login-error">' + errorMsg + '</p>';
+    }
+    html += '    <form class="rw-login-form" id="rw-login-form">';
+    html += '      <input type="email" class="rw-login-input" id="rw-login-email" placeholder="your@email.com" required />';
+    html += '      <button type="submit" class="rw-login-btn">View My Dashboard</button>';
+    html += '    </form>';
+    html += '  </div>';
+    html += '</div>';
+
+    container.innerHTML = html;
+
+    document.getElementById("rw-login-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var email = document.getElementById("rw-login-email").value.trim();
+      if (email) {
+        loadDashboard("email", email);
       }
-      render(data);
-    })
-    .catch(function () {
-      container.innerHTML = '<div class="rw-error"><p>Something went wrong loading your dashboard. Please try refreshing.</p></div>';
     });
+  }
 
   // ---- Render ----
 
@@ -257,6 +298,20 @@
       ".rw-milestone-reward { font-size: 13px; color: " + c.text + "; line-height: 1.4; margin-bottom: 10px; min-height: 36px; }",
       ".rw-milestone-status { font-size: 12px; font-weight: 600; color: " + c.textLight + "; display: flex; align-items: center; justify-content: center; gap: 4px; }",
       ".rw-unlocked .rw-milestone-status { color: " + c.success + "; }",
+
+      /* Login form */
+      ".rw-login { background: linear-gradient(135deg, " + c.primary + " 0%, " + c.primaryDark + " 100%); color: " + c.white + "; padding: 40px 28px; text-align: center; }",
+      ".rw-login-icon { margin-bottom: 16px; opacity: 0.9; }",
+      ".rw-login-icon svg { width: 40px; height: 40px; }",
+      ".rw-login h2 { margin: 0 0 8px; font-size: 22px; font-weight: 700; }",
+      ".rw-login-subtitle { margin: 0 0 24px; font-size: 14px; opacity: 0.85; }",
+      ".rw-login-error { background: rgba(255,255,255,0.15); border-radius: 12px; padding: 10px 16px; font-size: 13px; margin-bottom: 16px; }",
+      ".rw-login-form { display: flex; flex-direction: column; gap: 12px; max-width: 360px; margin: 0 auto; }",
+      ".rw-login-input { border: none; padding: 14px 18px; border-radius: 50px; font-size: 15px; color: " + c.text + "; outline: none; text-align: center; }",
+      ".rw-login-input::placeholder { color: " + c.textLight + "; }",
+      ".rw-login-btn { border: none; padding: 14px 24px; border-radius: 50px; font-size: 15px; font-weight: 700; background: " + c.white + "; color: " + c.primary + "; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }",
+      ".rw-login-btn:hover { transform: scale(1.03); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }",
+      ".rw-login-btn:active { transform: scale(0.98); }",
 
       /* Responsive */
       "@media (max-width: 540px) {",
