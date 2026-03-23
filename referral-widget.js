@@ -167,7 +167,7 @@
       var ms = CONFIG.milestones[j];
       var unlocked = count >= ms.threshold;
       var remaining = Math.max(ms.threshold - count, 0);
-      html += '    <div class="rw-milestone-card' + (unlocked ? " rw-unlocked" : "") + '">';
+      html += '    <div class="rw-milestone-card rw-tier-' + (j + 1) + (unlocked ? " rw-unlocked" : "") + '">';
       html += '      <div class="rw-milestone-icon">' + (unlocked ? ICONS.unlock : ICONS.lock) + '</div>';
       html += '      <div class="rw-milestone-badge">' + ms.threshold + '</div>';
       html += '      <div class="rw-milestone-label">' + ms.label + '</div>';
@@ -252,7 +252,7 @@
 
       /* Share section */
       ".rw-share { background: linear-gradient(135deg, " + c.primary + " 0%, " + c.primaryDark + " 100%); color: " + c.white + "; padding: 32px 28px 28px; text-align: center; }",
-      ".rw-share h2 { margin: 0 0 8px; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }",
+      ".rw-share h2 { margin: 0 0 8px; font-size: 28px; font-weight: 700; letter-spacing: -0.3px; }",
       ".rw-share-subtitle { margin: 0 0 24px; font-size: 14px; opacity: 0.85; }",
 
       /* Circular social buttons */
@@ -267,7 +267,7 @@
 
       /* Link box */
       ".rw-link-box { display: flex; border-radius: 50px; overflow: hidden; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); max-width: 600px; margin: 0 auto; }",
-      ".rw-link-input { flex: 1; border: none; padding: 12px 18px; font-size: 13px; color: " + c.text + "; background: " + c.white + "; outline: none; min-width: 0; border-radius: 50px 0 0 50px; }",
+      ".rw-link-input { flex: 1; border: none; padding: 12px 12px 12px 24px; font-size: 13px; color: " + c.text + "; background: " + c.white + "; outline: none; min-width: 0; border-radius: 50px 0 0 50px; }",
       ".rw-copy-btn { background: " + c.primaryDark + "; color: " + c.white + "; border: none; padding: 12px 22px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; letter-spacing: 0.5px; white-space: nowrap; display: flex; align-items: center; gap: 6px; border-radius: 0 50px 50px 0; }",
       ".rw-copy-btn:hover { background: " + c.text + "; }",
       ".rw-copy-btn.rw-copied { background: " + c.success + "; }",
@@ -276,8 +276,8 @@
       /* Progress section */
       ".rw-progress { background: " + c.background + "; padding: 32px 28px; text-align: center; }",
       ".rw-count { margin-bottom: 20px; }",
-      ".rw-count-number { font-size: 52px; font-weight: 800; color: " + c.primary + "; display: block; line-height: 1; }",
-      ".rw-count-label { font-size: 13px; color: " + c.textLight + "; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }",
+      ".rw-count-number { font-size: 64px; font-weight: 800; color: " + c.primary + "; display: block; line-height: 1; }",
+      ".rw-count-label { font-size: 16px; color: " + c.textLight + "; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }",
       ".rw-bar-container { position: relative; height: 14px; background: " + c.primaryLight + "; border-radius: 50px; overflow: visible; margin: 0 auto; max-width: 700px; }",
       ".rw-bar-fill { height: 100%; background: linear-gradient(90deg, " + c.primary + ", " + c.primaryDark + "); border-radius: 50px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }",
       ".rw-bar-marker { position: absolute; top: -5px; transform: translateX(-50%); text-align: center; }",
@@ -286,18 +286,23 @@
 
       /* Milestones section */
       ".rw-milestones { background: " + c.white + "; padding: 28px 28px 32px; }",
-      ".rw-milestones h3 { margin: 0 0 18px; font-size: 18px; font-weight: 700; text-align: center; }",
+      ".rw-milestones h3 { margin: 0 0 18px; font-size: 24px; font-weight: 700; text-align: center; }",
       ".rw-milestone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 900px; margin: 0 auto; }",
       ".rw-milestone-card { border: 2px solid " + c.primaryLight + "; border-radius: 20px; padding: 22px 14px 18px; text-align: center; transition: all 0.3s; position: relative; }",
-      ".rw-milestone-card.rw-unlocked { border-color: " + c.success + "; background: linear-gradient(180deg, rgba(76,175,80,0.04) 0%, rgba(76,175,80,0) 100%); box-shadow: 0 4px 16px rgba(76,175,80,0.12); }",
+      ".rw-milestone-card.rw-unlocked { border-color: transparent; color: " + c.white + "; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }",
+      ".rw-milestone-card.rw-unlocked.rw-tier-1 { background: #7294ab; }",
+      ".rw-milestone-card.rw-unlocked.rw-tier-2 { background: #9ecec7; }",
+      ".rw-milestone-card.rw-unlocked.rw-tier-3 { background: #414e5b; }",
       ".rw-milestone-icon { margin-bottom: 8px; color: " + c.textLight + "; display: flex; justify-content: center; }",
-      ".rw-unlocked .rw-milestone-icon { color: " + c.success + "; }",
+      ".rw-unlocked .rw-milestone-icon { color: " + c.white + "; }",
       ".rw-milestone-badge { width: 44px; height: 44px; line-height: 44px; border-radius: 50%; background: " + c.primaryLight + "; color: " + c.primary + "; font-weight: 800; font-size: 17px; margin: 0 auto 10px; transition: all 0.3s; }",
-      ".rw-unlocked .rw-milestone-badge { background: " + c.success + "; color: " + c.white + "; box-shadow: 0 2px 8px rgba(76,175,80,0.3); }",
+      ".rw-unlocked .rw-milestone-badge { background: rgba(255,255,255,0.25); color: " + c.white + "; }",
       ".rw-milestone-label { font-size: 11px; font-weight: 700; color: " + c.textLight + "; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }",
+      ".rw-unlocked .rw-milestone-label { color: rgba(255,255,255,0.85); }",
       ".rw-milestone-reward { font-size: 13px; color: " + c.text + "; line-height: 1.4; margin-bottom: 10px; min-height: 36px; }",
+      ".rw-unlocked .rw-milestone-reward { color: " + c.white + "; }",
       ".rw-milestone-status { font-size: 12px; font-weight: 600; color: " + c.textLight + "; display: flex; align-items: center; justify-content: center; gap: 4px; }",
-      ".rw-unlocked .rw-milestone-status { color: " + c.success + "; }",
+      ".rw-unlocked .rw-milestone-status { color: " + c.white + "; }",
 
       /* Login form */
       ".rw-login { background: linear-gradient(135deg, " + c.primary + " 0%, " + c.primaryDark + " 100%); color: " + c.white + "; padding: 40px 28px; text-align: center; }",
