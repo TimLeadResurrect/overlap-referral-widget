@@ -236,7 +236,7 @@
     style.id = "rw-styles";
     style.textContent = [
       "/* Referral Widget Styles */",
-      "#referral-widget { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; color: " + c.text + "; line-height: 1.5; }",
+      "#referral-widget { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 1200px; margin: 0 auto; color: " + c.text + "; line-height: 1.5; width: 100%; }",
       "#referral-widget * { box-sizing: border-box; }",
 
       /* Card wrapper */
@@ -266,7 +266,7 @@
       ".rw-btn-x { background: #000; color: " + c.white + "; }",
 
       /* Link box */
-      ".rw-link-box { display: flex; border-radius: 50px; overflow: hidden; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); }",
+      ".rw-link-box { display: flex; border-radius: 50px; overflow: hidden; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); max-width: 600px; margin: 0 auto; }",
       ".rw-link-input { flex: 1; border: none; padding: 12px 18px; font-size: 13px; color: " + c.text + "; background: " + c.white + "; outline: none; min-width: 0; border-radius: 50px 0 0 50px; }",
       ".rw-copy-btn { background: " + c.primaryDark + "; color: " + c.white + "; border: none; padding: 12px 22px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.2s; letter-spacing: 0.5px; white-space: nowrap; display: flex; align-items: center; gap: 6px; border-radius: 0 50px 50px 0; }",
       ".rw-copy-btn:hover { background: " + c.text + "; }",
@@ -278,7 +278,7 @@
       ".rw-count { margin-bottom: 20px; }",
       ".rw-count-number { font-size: 52px; font-weight: 800; color: " + c.primary + "; display: block; line-height: 1; }",
       ".rw-count-label { font-size: 13px; color: " + c.textLight + "; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }",
-      ".rw-bar-container { position: relative; height: 14px; background: " + c.primaryLight + "; border-radius: 50px; overflow: visible; margin: 0 14px; }",
+      ".rw-bar-container { position: relative; height: 14px; background: " + c.primaryLight + "; border-radius: 50px; overflow: visible; margin: 0 auto; max-width: 700px; }",
       ".rw-bar-fill { height: 100%; background: linear-gradient(90deg, " + c.primary + ", " + c.primaryDark + "); border-radius: 50px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }",
       ".rw-bar-marker { position: absolute; top: -5px; transform: translateX(-50%); text-align: center; }",
       ".rw-bar-marker span { display: block; width: 24px; height: 24px; line-height: 24px; border-radius: 50%; background: " + c.white + "; border: 2px solid " + c.primaryLight + "; font-size: 10px; font-weight: 700; color: " + c.textLight + "; transition: all 0.3s; }",
@@ -287,7 +287,7 @@
       /* Milestones section */
       ".rw-milestones { background: " + c.white + "; padding: 28px 28px 32px; }",
       ".rw-milestones h3 { margin: 0 0 18px; font-size: 18px; font-weight: 700; text-align: center; }",
-      ".rw-milestone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }",
+      ".rw-milestone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 900px; margin: 0 auto; }",
       ".rw-milestone-card { border: 2px solid " + c.primaryLight + "; border-radius: 20px; padding: 22px 14px 18px; text-align: center; transition: all 0.3s; position: relative; }",
       ".rw-milestone-card.rw-unlocked { border-color: " + c.success + "; background: linear-gradient(180deg, rgba(76,175,80,0.04) 0%, rgba(76,175,80,0) 100%); box-shadow: 0 4px 16px rgba(76,175,80,0.12); }",
       ".rw-milestone-icon { margin-bottom: 8px; color: " + c.textLight + "; display: flex; justify-content: center; }",
@@ -306,7 +306,7 @@
       ".rw-login h2 { margin: 0 0 8px; font-size: 22px; font-weight: 700; }",
       ".rw-login-subtitle { margin: 0 0 24px; font-size: 14px; opacity: 0.85; }",
       ".rw-login-error { background: rgba(255,255,255,0.15); border-radius: 12px; padding: 10px 16px; font-size: 13px; margin-bottom: 16px; }",
-      ".rw-login-form { display: flex; flex-direction: column; gap: 12px; max-width: 360px; margin: 0 auto; }",
+      ".rw-login-form { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto; }",
       ".rw-login-input { border: none; padding: 14px 18px; border-radius: 50px; font-size: 15px; color: " + c.text + "; outline: none; text-align: center; }",
       ".rw-login-input::placeholder { color: " + c.textLight + "; }",
       ".rw-login-btn { border: none; padding: 14px 24px; border-radius: 50px; font-size: 15px; font-weight: 700; background: " + c.white + "; color: " + c.primary + "; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }",
