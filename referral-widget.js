@@ -6,6 +6,9 @@
   // ============================================================
   var CONFIG = {
     supabaseUrl: "https://jpctdyktycxzoisyesjj.supabase.co/functions/v1/get-dashboard",
+    // The email box sends the member page's one-tap sign-in link; the dashboard itself opens only by ?ref=.
+    loginUrl: "https://support.theoverlap.life/api/portal/login",
+    profileUrl: "https://theoverlap.life/profile/",
     optinUrl: "https://theoverlap.life/prayer-journal",
     milestones: [
       { threshold: 5, label: "Tier 1", reward: '"Redeeming the Time" Planning & Productivity Training' },
@@ -67,17 +70,8 @@
       .then(function (res) { return res.json(); })
       .then(function (data) {
         if (!data.success) {
-          if (paramName === "email") {
-            renderLoginForm("We couldn't find that email. Make sure you're using the same email you signed up with.");
-          } else {
-            container.innerHTML = '<div class="rw-error"><p>We couldn\'t find that referral code. Double-check your link and try again.</p></div>';
-          }
+          container.innerHTML = '<div class="rw-error"><p>We couldn\'t find that referral code. Double-check your link and try again.</p></div>';
           return;
-        }
-        // Update URL with ref code so bookmarking/sharing works
-        if (paramName === "email" && data.referral_code) {
-          var newUrl = window.location.pathname + "?ref=" + data.referral_code;
-          window.history.replaceState(null, "", newUrl);
         }
         render(data);
       })
@@ -92,13 +86,13 @@
     html += '  <div class="rw-login">';
     html += '    <div class="rw-login-icon">' + ICONS.unlock + '</div>';
     html += '    <h2>View Your Referral Dashboard</h2>';
-    html += '    <p class="rw-login-subtitle">Enter the email you signed up with to see your stats and referral link.</p>';
+    html += '    <p class="rw-login-subtitle">Enter the email you signed up with, and we will email you a one-tap link to your stats and referral link.</p>';
     if (errorMsg) {
       html += '    <p class="rw-login-error">' + errorMsg + '</p>';
     }
     html += '    <form class="rw-login-form" id="rw-login-form">';
     html += '      <input type="email" class="rw-login-input" id="rw-login-email" placeholder="your@email.com" required />';
-    html += '      <button type="submit" class="rw-login-btn">View My Dashboard</button>';
+    html += '      <button type="submit" class="rw-login-btn" id="rw-login-btn">Email Me My Link</button>';
     html += '    </form>';
     html += '  </div>';
     html += '</div>';
@@ -109,9 +103,38 @@
       e.preventDefault();
       var email = document.getElementById("rw-login-email").value.trim();
       if (email) {
-        loadDashboard("email", email);
+        sendLoginLink(email);
       }
     });
+  }
+
+  // Same answer whether or not the email is on file, so the box never reveals who signed up.
+  function sendLoginLink(email) {
+    var btn = document.getElementById("rw-login-btn");
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Sending...";
+    }
+    fetch(CONFIG.loginUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ email: email }),
+    })
+      .then(function () { renderLinkSent(); })
+      .catch(function () { renderLinkSent(); });
+  }
+
+  function renderLinkSent() {
+    var html = '';
+    html += '<div class="rw-card">';
+    html += '  <div class="rw-login">';
+    html += '    <div class="rw-login-icon">' + ICONS.email + '</div>';
+    html += '    <h2>Check Your Inbox</h2>';
+    html += '    <p class="rw-login-subtitle">If that email is on file, a sign-in link is on its way. It works for 30 minutes and opens your stats and referral link.</p>';
+    html += '    <p class="rw-login-subtitle">Nothing yet? Check spam, or <a href="' + CONFIG.profileUrl + '">sign in on your profile page</a>.</p>';
+    html += '  </div>';
+    html += '</div>';
+    container.innerHTML = html;
   }
 
   // ---- Render ----
