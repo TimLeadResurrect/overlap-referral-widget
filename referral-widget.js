@@ -326,8 +326,8 @@
       /* Milestones section */
       ".rw-milestones { background: " + c.white + "; padding: 28px 28px 32px; }",
       ".rw-milestones h3 { margin: 0 0 18px; font-size: 24px; font-weight: 700; text-align: center; }",
-      ".rw-milestone-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; max-width: 960px; margin: 0 auto; }",
-      ".rw-milestone-card { border: 2px solid " + c.primaryLight + "; border-radius: 20px; padding: 22px 14px 18px; text-align: center; transition: all 0.3s; position: relative; }",
+      ".rw-milestone-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; max-width: 960px; margin: 0 auto; }",
+      ".rw-milestone-card { border: 2px solid " + c.primaryLight + "; border-radius: 20px; padding: 20px 8px 16px; text-align: center; transition: all 0.3s; position: relative; }",
       ".rw-milestone-card.rw-unlocked { border-color: transparent; color: " + c.white + "; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }",
       ".rw-milestone-card.rw-unlocked.rw-tier-1 { background: #7294ab; }",
       ".rw-milestone-card.rw-unlocked.rw-tier-2 { background: #5a7a8f; }",
@@ -359,6 +359,10 @@
       ".rw-login-btn:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.15); }",
 
       /* Responsive */
+      /* Five in a row needs room; below that, one column (the share page and thank-you pages narrow on phones). */
+      "@media (max-width: 680px) {",
+      "  .rw-milestone-grid { grid-template-columns: 1fr; max-width: 300px; margin: 0 auto; }",
+      "}",
       "@media (max-width: 540px) {",
       "  .rw-share { padding: 24px 18px 22px; }",
       "  .rw-share h2 { font-size: 19px; }",
