@@ -10,11 +10,18 @@
     loginUrl: "https://support.theoverlap.life/api/portal/login",
     profileUrl: "https://theoverlap.life/profile/",
     optinUrl: "https://theoverlap.life/prayer-journal",
+    // The Renewal Ladder (2026-11-17): rewards at 1, 3, 5, 10, and 20 friends. Words by ol-writer on Fable
+    // (ol-content-system deliverables/2026-11-17-renewal-ladder-part2/copy.md, keys W.*). The bar spaces the
+    // steps evenly, so 1 and 3 do not crowd together on a scale of 20.
     milestones: [
-      { threshold: 5, label: "Tier 1", reward: '"Redeeming the Time" Planning & Productivity Training' },
-      { threshold: 10, label: "Tier 2", reward: 'Full "The Overlap Life" Book Package \u2014 eBook, Audio, & Study Guide' },
-      { threshold: 20, label: "Tier 3", reward: "30-Min Q&A Call, Signed Book, & Request-a-Video Topic" },
+      { threshold: 1, label: "1 friend", reward: "Heaven on Earth Morning Audio" },
+      { threshold: 3, label: "3 friends", reward: "Re:Mind video training" },
+      { threshold: 5, label: "5 friends", reward: "Pick one Re:Created training" },
+      { threshold: 10, label: "10 friends", reward: "All three, the book, a gift to give" },
+      { threshold: 20, label: "20 friends", reward: "Signed book and a call with Tim" },
     ],
+    heading: "Share The Overlap Life",
+    subheading: "Send your link to a friend, and when they sign up for anything free, you climb the Renewal Ladder.",
     colors: {
       primary: "#7294ab",
       primaryLight: "#e0eef5",
@@ -142,16 +149,26 @@
   function render(data) {
     var referralLink = CONFIG.optinUrl + "?ref=" + data.referral_code;
     var count = data.referral_count;
-    var maxMilestone = CONFIG.milestones[CONFIG.milestones.length - 1].threshold;
-    var fillPercent = Math.min((count / maxMilestone) * 100, 100);
+    var steps = CONFIG.milestones.length;
+    // Evenly spaced steps: each takes an equal share of the bar, filled in proportion between steps.
+    var stepPos = function (n) {
+      var prev = 0;
+      for (var k = 0; k < steps; k++) {
+        var t = CONFIG.milestones[k].threshold;
+        if (n < t) return ((k + (n - prev) / (t - prev)) * 100) / steps;
+        prev = t;
+      }
+      return 100;
+    };
+    var fillPercent = stepPos(count);
 
     var html = "";
 
     // Share section
     html += '<div class="rw-card">';
     html += '  <div class="rw-share">';
-    html += '    <h2>Share & Earn Rewards</h2>';
-    html += '    <p class="rw-share-subtitle">Share your unique link with friends. When they sign up, you earn rewards!</p>';
+    html += '    <h2>' + CONFIG.heading + '</h2>';
+    html += '    <p class="rw-share-subtitle">' + CONFIG.subheading + '</p>';
     html += '    <div class="rw-share-buttons">';
     html += '      <a class="rw-btn-social rw-btn-email" href="' + buildEmailLink(referralLink) + '" target="_blank" rel="noopener" title="Share via Email">' + ICONS.email + '</a>';
     html += '      <a class="rw-btn-social rw-btn-facebook" href="' + buildFacebookLink(referralLink) + '" target="_blank" rel="noopener" title="Share on Facebook">' + ICONS.facebook + '</a>';
@@ -167,13 +184,13 @@
     html += '  <div class="rw-progress">';
     html += '    <div class="rw-count">';
     html += '      <span class="rw-count-number">' + count + '</span>';
-    html += '      <span class="rw-count-label">referral' + (count !== 1 ? "s" : "") + '</span>';
+    html += '      <span class="rw-count-label">friend' + (count !== 1 ? "s" : "") + '</span>';
     html += '    </div>';
     html += '    <div class="rw-bar-container">';
     html += '      <div class="rw-bar-fill" style="width:' + fillPercent + '%"></div>';
     for (var i = 0; i < CONFIG.milestones.length; i++) {
       var m = CONFIG.milestones[i];
-      var markerPos = (m.threshold / maxMilestone) * 100;
+      var markerPos = ((i + 1) * 100) / steps;
       var reached = count >= m.threshold;
       html += '      <div class="rw-bar-marker' + (reached ? " rw-reached" : "") + '" style="left:' + markerPos + '%">';
       html += '        <span>' + m.threshold + '</span>';
@@ -184,7 +201,7 @@
 
     // Milestones section
     html += '  <div class="rw-milestones">';
-    html += '    <h3>Your Rewards</h3>';
+    html += '    <h3>The Renewal Ladder</h3>';
     html += '    <div class="rw-milestone-grid">';
     for (var j = 0; j < CONFIG.milestones.length; j++) {
       var ms = CONFIG.milestones[j];
@@ -197,9 +214,9 @@
       html += '      <div class="rw-milestone-reward">' + ms.reward + '</div>';
       html += '      <div class="rw-milestone-status">';
       if (unlocked) {
-        html += ICONS.star + ' Unlocked!';
+        html += ICONS.star + ' Earned';
       } else {
-        html += remaining + ' more to go';
+        html += remaining + (remaining === 1 ? ' more friend to go' : ' more friends to go');
       }
       html += '      </div>';
       html += '    </div>';
@@ -281,8 +298,7 @@
       /* Circular social buttons */
       ".rw-share-buttons { display: flex; gap: 14px; justify-content: center; margin-bottom: 22px; }",
       ".rw-btn-social { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }",
-      ".rw-btn-social:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }",
-      ".rw-btn-social:active { transform: scale(0.95); }",
+      ".rw-btn-social:hover { box-shadow: 0 0 0 3px rgba(255,255,255,0.55); }",
       ".rw-btn-social svg { display: block; }",
       ".rw-btn-email { background: " + c.white + "; color: " + c.primary + "; }",
       ".rw-btn-facebook { background: #1877F2; color: " + c.white + "; }",
@@ -310,12 +326,14 @@
       /* Milestones section */
       ".rw-milestones { background: " + c.white + "; padding: 28px 28px 32px; }",
       ".rw-milestones h3 { margin: 0 0 18px; font-size: 24px; font-weight: 700; text-align: center; }",
-      ".rw-milestone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 900px; margin: 0 auto; }",
+      ".rw-milestone-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; max-width: 960px; margin: 0 auto; }",
       ".rw-milestone-card { border: 2px solid " + c.primaryLight + "; border-radius: 20px; padding: 22px 14px 18px; text-align: center; transition: all 0.3s; position: relative; }",
       ".rw-milestone-card.rw-unlocked { border-color: transparent; color: " + c.white + "; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }",
       ".rw-milestone-card.rw-unlocked.rw-tier-1 { background: #7294ab; }",
-      ".rw-milestone-card.rw-unlocked.rw-tier-2 { background: #9ecec7; }",
-      ".rw-milestone-card.rw-unlocked.rw-tier-3 { background: #414e5b; }",
+      ".rw-milestone-card.rw-unlocked.rw-tier-2 { background: #5a7a8f; }",
+      ".rw-milestone-card.rw-unlocked.rw-tier-3 { background: #6fb3a9; }",
+      ".rw-milestone-card.rw-unlocked.rw-tier-4 { background: #414e5b; }",
+      ".rw-milestone-card.rw-unlocked.rw-tier-5 { background: #2f353c; }",
       ".rw-milestone-icon { margin-bottom: 8px; color: " + c.textLight + "; display: flex; justify-content: center; }",
       ".rw-unlocked .rw-milestone-icon { color: " + c.white + "; }",
       ".rw-milestone-badge { width: 44px; height: 44px; line-height: 44px; border-radius: 50%; background: " + c.primaryLight + "; color: " + c.primary + "; font-weight: 800; font-size: 17px; margin: 0 auto 10px; transition: all 0.3s; }",
@@ -338,8 +356,7 @@
       ".rw-login-input { border: none; padding: 14px 18px; border-radius: 50px; font-size: 15px; color: " + c.text + "; outline: none; text-align: center; }",
       ".rw-login-input::placeholder { color: " + c.textLight + "; }",
       ".rw-login-btn { border: none; padding: 14px 24px; border-radius: 50px; font-size: 15px; font-weight: 700; background: " + c.white + "; color: " + c.primary + "; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }",
-      ".rw-login-btn:hover { transform: scale(1.03); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }",
-      ".rw-login-btn:active { transform: scale(0.98); }",
+      ".rw-login-btn:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.15); }",
 
       /* Responsive */
       "@media (max-width: 540px) {",
@@ -347,7 +364,7 @@
       "  .rw-share h2 { font-size: 19px; }",
       "  .rw-btn-social { width: 44px; height: 44px; }",
       "  .rw-count-number { font-size: 40px; }",
-      "  .rw-milestone-grid { grid-template-columns: 1fr; max-width: 280px; margin: 0 auto; }",
+      "  .rw-milestone-grid { grid-template-columns: 1fr; max-width: 300px; margin: 0 auto; }",
       "  .rw-progress { padding: 24px 18px; }",
       "  .rw-milestones { padding: 22px 18px 26px; }",
       "  .rw-card { border-radius: 18px; }",
